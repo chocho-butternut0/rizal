@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards — Rizal Reviewer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="site-title">Rizal <span>Reviewer</span></div>
+      <nav class="site-nav">
+        <a href="index.html"      class="nav-link">Tahanan</a>
+        <a href="quiz.html"       class="nav-link">Quiz</a>
+        <a href="flashcards.html" class="nav-link active">Flashcards</a>
+        <a href="reviewer.html"   class="nav-link">Reviewer</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- FLASHCARD LAYOUT -->
+  <main class="flashcard-layout">
+
+    <!-- Controls Row -->
+    <div class="fc-controls">
+      <select class="fc-filter" id="categoryFilter" onchange="filterCategory()">
+        <option value="all">Lahat ng Kategorya</option>
+        <option value="Pamilya at Kapanganakan">Pamilya at Kapanganakan</option>
+        <option value="Biñan">Biñan</option>
+        <option value="Calamba">Calamba</option>
+        <option value="GOMBURZA">GOMBURZA</option>
+        <option value="Lipunang Kolonyal">Lipunang Kolonyal</option>
+        <option value="Ateneo Municipal">Ateneo Municipal</option>
+        <option value="UST">UST</option>
+        <option value="Mga Tula at Akda">Mga Tula at Akda</option>
+        <option value="Noli Me Tangere">Noli Me Tangere</option>
+        <option value="El Filibusterismo">El Filibusterismo</option>
+        <option value="Buhay sa Europa">Buhay sa Europa</option>
+        <option value="Mga Pangunahing Tao">Mga Pangunahing Tao</option>
+        <option value="Paglalakbay">Paglalakbay</option>
+        <option value="Dapitan">Dapitan</option>
+        <option value="La Liga Filipina">La Liga Filipina</option>
+        <option value="Josephine Bracken">Josephine Bracken</option>
+        <option value="Katipunan">Katipunan</option>
+        <option value="Himagsikan">Himagsikan</option>
+        <option value="Kamatayan">Kamatayan</option>
+        <option value="Mga Petsa">Mga Petsa</option>
+        <option value="Recitation">Recitation</option>
+      </select>
+
+      <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="shuffleCards()" title="I-shuffle ang mga kard">🔀 I-Shuffle</button>
+        <button class="btn btn-ghost"   onclick="resetProgress()" title="I-reset ang progreso">↺ Reset</button>
+        <span class="fc-progress-text" id="progressText">Kard 1 ng 67</span>
+      </div>
+    </div>
+
+    <!-- Category Badge -->
+    <div style="text-align:center; margin-bottom:1rem;">
+      <span class="category-badge" id="fcCatBadge">Kategorya</span>
+    </div>
+
+    <!-- Flip Card -->
+    <div class="flip-scene" id="flipScene" onclick="flipCard()" role="button" aria-label="I-flip ang kard" tabindex="0">
+      <div class="flip-card" id="flipCard">
+        <div class="flip-face flip-front">
+          <span class="flip-face-label">Tanong / Termino</span>
+          <div class="flip-face-text" id="cardFront">Naglo-load...</div>
+          <span class="flip-hint">I-click para i-flip</span>
+        </div>
+        <div class="flip-face flip-back">
+          <span class="flip-face-label">Sagot / Paliwanag</span>
+          <div class="flip-face-text" id="cardBack">Sagot</div>
+          <span class="flip-hint">I-click para i-flip</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracker Dots -->
+    <div class="tracker-bar" id="trackerBar"></div>
+
+    <!-- Navigation -->
+    <div class="fc-nav">
+      <button class="btn btn-outline" id="prevBtn" onclick="prevCard()">← Nakaraan</button>
+      <button class="btn btn-green"   onclick="markGotIt()">Got it ✓</button>
+      <button class="btn btn-red"     onclick="markReview()">Need Review ✗</button>
+      <button class="btn btn-outline" id="nextBtn" onclick="nextCard()">Susunod →</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="fc-stats" id="fcStats">
+      <span class="fc-stat-item">
+        <span class="fc-stat-dot" style="background:var(--green);"></span>
+        Got it: <strong id="gotItCount">0</strong>
+      </span>
+      <span class="fc-stat-item">
+        <span class="fc-stat-dot" style="background:var(--red);"></span>
+        Need Review: <strong id="reviewCount">0</strong>
+      </span>
+      <span class="fc-stat-item">
+        <span class="fc-stat-dot" style="background:var(--light-gray); border:1px solid var(--mid-gray);"></span>
+        Hindi pa: <strong id="unseenCount">0</strong>
+      </span>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>Rizal Reviewer &copy; 2025 &mdash; Para sa mga mag-aaral ng kasaysayan ng Pilipinas.</p>
+  </footer>
+
+  <script src="flashcards.js"></script>
+  <script>
+  // =========================================================
+  //  Flashcard Engine
+  // =========================================================
+
+  let deck       = [];        // active filtered deck
+  let currentIdx = 0;
+  let isFlipped  = false;
+  // status: 0 = unseen, 1 = got it, 2 = review
+  let statusMap  = {};        // keyed by card id
+
+  // ── Helpers ──────────────────────────────────────────────
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // ── Init ─────────────────────────────────────────────────
+  function initCards() {
+    FLASHCARDS.forEach(c => { if (!(c.id in statusMap)) statusMap[c.id] = 0; });
+    filterCategory();
+  }
+
+  // ── Filter ───────────────────────────────────────────────
+  function filterCategory() {
+    const val = document.getElementById('categoryFilter').value;
+    deck = val === 'all'
+      ? [...FLASHCARDS]
+      : FLASHCARDS.filter(c => c.category === val);
+    currentIdx = 0;
+    renderCard(true);
+    renderDots();
+  }
+
+  // ── Shuffle ───────────────────────────────────────────────
+  function shuffleCards() {
+    deck = shuffle(deck);
+    currentIdx = 0;
+    renderCard(true);
+    renderDots();
+  }
+
+  // ── Render Card ───────────────────────────────────────────
+  function renderCard(resetFlip) {
+    if (deck.length === 0) {
+      document.getElementById('cardFront').textContent = 'Walang kard sa kategoryang ito.';
+      document.getElementById('cardBack').textContent  = '';
+      document.getElementById('fcCatBadge').textContent = '';
+      document.getElementById('progressText').textContent = 'Kard 0 ng 0';
+      return;
+    }
+
+    const card = deck[currentIdx];
+
+    if (resetFlip) {
+      unflip();
+    }
+
+    document.getElementById('cardFront').textContent   = card.front;
+    document.getElementById('cardBack').textContent    = card.back;
+    document.getElementById('fcCatBadge').textContent  = card.category;
+    document.getElementById('progressText').textContent = `Kard ${currentIdx + 1} ng ${deck.length}`;
+
+    // Prev/Next buttons
+    document.getElementById('prevBtn').disabled = (currentIdx === 0);
+    document.getElementById('nextBtn').disabled = (currentIdx === deck.length - 1);
+
+    renderDots();
+    updateStats();
+  }
+
+  // ── Flip ──────────────────────────────────────────────────
+  function flipCard() {
+    isFlipped = !isFlipped;
+    document.getElementById('flipCard').classList.toggle('flipped', isFlipped);
+  }
+
+  function unflip() {
+    isFlipped = false;
+    document.getElementById('flipCard').classList.remove('flipped');
+  }
+
+  // Keyboard support
+  document.getElementById('flipScene').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipCard(); }
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft')  prevCard();
+  });
+
+  // ── Navigation ────────────────────────────────────────────
+  function nextCard() {
+    if (currentIdx < deck.length - 1) {
+      currentIdx++;
+      renderCard(true);
+    }
+  }
+
+  function prevCard() {
+    if (currentIdx > 0) {
+      currentIdx--;
+      renderCard(true);
+    }
+  }
+
+  // ── Mark ──────────────────────────────────────────────────
+  function markGotIt() {
+    if (!deck.length) return;
+    const card = deck[currentIdx];
+    statusMap[card.id] = 1;
+    renderDots();
+    updateStats();
+    // Auto advance
+    setTimeout(() => { if (currentIdx < deck.length - 1) nextCard(); }, 350);
+  }
+
+  function markReview() {
+    if (!deck.length) return;
+    const card = deck[currentIdx];
+    statusMap[card.id] = 2;
+    renderDots();
+    updateStats();
+    setTimeout(() => { if (currentIdx < deck.length - 1) nextCard(); }, 350);
+  }
+
+  // ── Reset ─────────────────────────────────────────────────
+  function resetProgress() {
+    if (!confirm('I-reset ang lahat ng progreso?')) return;
+    FLASHCARDS.forEach(c => { statusMap[c.id] = 0; });
+    renderDots();
+    updateStats();
+  }
+
+  // ── Dots ──────────────────────────────────────────────────
+  function renderDots() {
+    const bar = document.getElementById('trackerBar');
+    bar.innerHTML = deck.map((card, i) => {
+      let cls = 'tracker-dot';
+      if (i === currentIdx)      cls += ' current';
+      else if (statusMap[card.id] === 1) cls += ' got-it';
+      else if (statusMap[card.id] === 2) cls += ' review';
+      return `<span class="${cls}" title="Kard ${i+1}"></span>`;
+    }).join('');
+  }
+
+  // ── Stats ─────────────────────────────────────────────────
+  function updateStats() {
+    const ids = deck.map(c => c.id);
+    const gotIt  = ids.filter(id => statusMap[id] === 1).length;
+    const review = ids.filter(id => statusMap[id] === 2).length;
+    const unseen = ids.filter(id => statusMap[id] === 0).length;
+    document.getElementById('gotItCount').textContent  = gotIt;
+    document.getElementById('reviewCount').textContent = review;
+    document.getElementById('unseenCount').textContent = unseen;
+  }
+
+  // ── Start ─────────────────────────────────────────────────
+  initCards();
+  </script>
+
+</body>
+</html>

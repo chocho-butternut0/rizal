@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz — Rizal Reviewer</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Mode Select Screen ── */
+    .mode-select-screen {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .mode-select-hero {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+
+    .mode-select-hero h1 {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--primary);
+      margin-bottom: .4rem;
+    }
+
+    .mode-select-hero p {
+      color: var(--mid-gray);
+      font-size: .97rem;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .type-card {
+      background: var(--white);
+      border: 2.5px solid var(--light-gray);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      user-select: none;
+    }
+
+    .type-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .type-card.selected {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,160,23,.2);
+    }
+
+    .type-card-icon { font-size: 1.8rem; margin-bottom: .5rem; display: block; }
+
+    .type-card h3 {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.95rem;
+      color: var(--primary);
+      margin-bottom: .25rem;
+      line-height: 1.2;
+    }
+
+    .type-card p {
+      font-size: .75rem;
+      color: var(--mid-gray);
+      line-height: 1.35;
+    }
+
+    .type-card .q-count {
+      display: inline-block;
+      margin-top: .5rem;
+      background: var(--light-gray);
+      color: var(--navy);
+      font-size: .7rem;
+      font-weight: 700;
+      border-radius: 99px;
+      padding: .15rem .55rem;
+    }
+
+    .type-card.selected .q-count {
+      background: rgba(255,173,51,.18);
+      color: var(--accent-red);
+    }
+
+    /* all-types card spans full width on its row */
+    .type-card-all {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+      padding: 1rem 1.25rem;
+    }
+
+    .type-card-all .type-card-icon { margin-bottom: 0; font-size: 1.6rem; flex-shrink: 0; }
+
+    .type-card-all .card-text h3 { margin-bottom: .15rem; font-size: 1rem; }
+    .type-card-all .card-text p { font-size: .8rem; }
+
+    .start-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .btn-start {
+      background: var(--accent-orange);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .8rem 2.5rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: filter var(--transition), transform var(--transition);
+      letter-spacing: .02em;
+    }
+
+    .btn-start:hover { filter: brightness(1.08); transform: translateY(-2px); }
+    .btn-start:disabled { opacity: .45; cursor: not-allowed; transform: none; filter: none; }
+
+    /* colour accents per type */
+    .type-card[data-type="identification"] { --accent: #6baa75; }
+    .type-card[data-type="multiple-choice"] { --accent: #4c57a9; }
+    .type-card[data-type="enumeration"] { --accent: #ffad33; }
+    .type-card[data-type="essay"] { --accent: #cc1400; }
+    .type-card[data-type="all"] { --accent: #967cc7; }
+
+    .type-card.selected { border-color: var(--accent, var(--accent-orange)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, var(--accent-orange)) 20%, transparent); }
+    .type-card.selected h3 { color: var(--accent, var(--primary)); }
+    .type-card.selected .q-count { background: color-mix(in srgb, var(--accent, var(--accent-orange)) 12%, transparent); color: var(--accent, var(--accent-red)); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="site-title">Rizal <span>Reviewer</span></div>
+      <nav class="site-nav">
+        <a href="index.html"      class="nav-link">Tahanan</a>
+        <a href="quiz.html"       class="nav-link active">Quiz</a>
+        <a href="flashcards.html" class="nav-link">Flashcards</a>
+        <a href="reviewer.html"   class="nav-link">Reviewer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="quizMain">
+
+    <!-- ══════════════════════════════════════════════════════
+         MODE SELECT SCREEN - STEP 1: TOPIC/YUGTO
+    ══════════════════════════════════════════════════════ -->
+    <div id="topicSelectScreen" class="mode-select-screen">
+      <div class="mode-select-hero">
+        <div class="hero-badge">📚 Hakbang 1: Piliin ang Yugto/Paksa</div>
+        <h1>Anong yugto ang<br>gusto mong pag-aralan?</h1>
+        <p>Pumili ng topic para ma-master mo ang bawat yugto ng buhay ni Rizal.</p>
+      </div>
+
+      <div class="type-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+
+        <!-- Yugto 1: Pamilya at Kabataan -->
+        <div class="type-card" data-category="yugto1" onclick="selectCategory(this)">
+          <span class="type-card-icon">👨‍👩‍👦</span>
+          <h3>Yugto 1</h3>
+          <p><strong>Pamilya at Kabataan</strong><br>Calamba, Biñan, Pamilya</p>
+          <span class="q-count" id="count-yugto1">0 tanong</span>
+        </div>
+
+        <!-- Yugto 2: Ateneo -->
+        <div class="type-card" data-category="yugto2" onclick="selectCategory(this)">
+          <span class="type-card-icon">🎓</span>
+          <h3>Yugto 2</h3>
+          <p><strong>Ateneo Municipal</strong><br>Edukasyon, Imperyo, Tula</p>
+          <span class="q-count" id="count-yugto2">0 tanong</span>
+        </div>
+
+        <!-- Yugto 3: UST -->
+        <div class="type-card" data-category="yugto3" onclick="selectCategory(this)">
+          <span class="type-card-icon">📖</span>
+          <h3>Yugto 3</h3>
+          <p><strong>UST</strong><br>Medisina, Pag-ibig, Diskriminasyon</p>
+          <span class="q-count" id="count-yugto3">0 tanong</span>
+        </div>
+
+        <!-- Yugto 4: Europa -->
+        <div class="type-card" data-category="yugto4" onclick="selectCategory(this)">
+          <span class="type-card-icon">🌍</span>
+          <h3>Yugto 4</h3>
+          <p><strong>Buhay sa Europa</strong><br>Madrid, Paris, Heidelberg, Berlin</p>
+          <span class="q-count" id="count-yugto4">0 tanong</span>
+        </div>
+
+        <!-- Yugto 5: Noli -->
+        <div class="type-card" data-category="yugto5" onclick="selectCategory(this)">
+          <span class="type-card-icon">📕</span>
+          <h3>Yugto 5</h3>
+          <p><strong>Noli Me Tangere</strong><br>Pagsulat, Tauhan, Reaksyon</p>
+          <span class="q-count" id="count-yugto5">0 tanong</span>
+        </div>
+
+        <!-- Yugto 6: Paglalakbay -->
+        <div class="type-card" data-category="yugto6" onclick="selectCategory(this)">
+          <span class="type-card-icon">✈️</span>
+          <h3>Yugto 6</h3>
+          <p><strong>Paglalakbay</strong><br>Japan, USA, Asya</p>
+          <span class="q-count" id="count-yugto6">0 tanong</span>
+        </div>
+
+        <!-- GOMBURZA & Colonial -->
+        <div class="type-card" data-category="yugto7" onclick="selectCategory(this)">
+          <span class="type-card-icon">⚖️</span>
+          <h3>Yugto 7</h3>
+          <p><strong>GOMBURZA & Kolonyal</strong><br>Lipunan, Buwis, Pang-aapi</p>
+          <span class="q-count" id="count-yugto7">0 tanong</span>
+        </div>
+
+        <!-- Mga Akda -->
+        <div class="type-card" data-category="yugto8" onclick="selectCategory(this)">
+          <span class="type-card-icon">✍️</span>
+          <h3>Yugto 8</h3>
+          <p><strong>Mga Tula at Akda</strong><br>Poems, Essays, Sanaysay</p>
+          <span class="q-count" id="count-yugto8">0 tanong</span>
+        </div>
+
+        <!-- All Topics -->
+        <div class="type-card type-card-all" data-category="all" onclick="selectCategory(this)">
+          <span class="type-card-icon">🎯</span>
+          <div class="card-text">
+            <h3>Lahat ng Yugto</h3>
+            <p>Halo-halong tanong mula sa lahat ng paksa. Random at komprehensibo.</p>
+          </div>
+          <span class="q-count" id="count-all-topics" style="margin-top:0; margin-left:auto; flex-shrink:0;">0 tanong</span>
+        </div>
+
+      </div>
+
+      <div class="start-row">
+        <button class="btn-start" id="categoryNextBtn" onclick="goToTypeSelect()" disabled>
+          Susunod: Piliin ang Uri ng Tanong →
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         MODE SELECT SCREEN - STEP 2: QUESTION TYPE
+    ══════════════════════════════════════════════════════ -->
+    <div id="modeSelectScreen" class="mode-select-screen hidden">
+      <div class="mode-select-hero">
+        <div class="hero-badge">🧠 Hakbang 2: Piliin ang Uri ng Tanong</div>
+        <h1>Anong uri ng quiz<br>ang gusto mo?</h1>
+        <p>Pumili ng question type para sa <span id="selectedTopicName" style="color:var(--accent-orange);font-weight:700;"></span></p>
+        <button class="btn btn-ghost" style="margin-top:.5rem;" onclick="backToTopicSelect()">← Bumalik sa Yugto</button>
+      </div>
+
+      <div class="type-grid">
+
+        <!-- Identification -->
+        <div class="type-card" data-type="identification" onclick="selectType(this)">
+          <span class="type-card-icon">🔍</span>
+          <h3>Identification</h3>
+          <p>Ibigay ang tamang sagot batay sa paglalarawan o pahiwatig.</p>
+          <span class="q-count" id="count-identification">0 tanong</span>
+        </div>
+
+        <!-- Multiple Choice -->
+        <div class="type-card" data-type="multiple-choice" onclick="selectType(this)">
+          <span class="type-card-icon">🔵</span>
+          <h3>Multiple Choice</h3>
+          <p>Piliin ang tamang sagot sa apat na pagpipilian.</p>
+          <span class="q-count" id="count-multiple-choice">0 tanong</span>
+        </div>
+
+        <!-- Enumeration -->
+        <div class="type-card" data-type="enumeration" onclick="selectType(this)">
+          <span class="type-card-icon">📋</span>
+          <h3>Enumeration</h3>
+          <p>Ilista ang mga tamang sagot sa bawat tanong.</p>
+          <span class="q-count" id="count-enumeration">0 tanong</span>
+        </div>
+
+        <!-- Essay -->
+        <div class="type-card" data-type="essay" onclick="selectType(this)">
+          <span class="type-card-icon">✍️</span>
+          <h3>Essay</h3>
+          <p>Sagutin nang bukas, pagkatapos ay ikumpara sa modelo ng sagot.</p>
+          <span class="q-count" id="count-essay">0 tanong</span>
+        </div>
+
+        <!-- All Types -->
+        <div class="type-card type-card-all" data-type="all" onclick="selectType(this)">
+          <span class="type-card-icon">🎯</span>
+          <div class="card-text">
+            <h3>Lahat ng Uri</h3>
+            <p>Halo-halong identification, multiple choice, enumeration, at essay. Randomized ang order.</p>
+          </div>
+          <span class="q-count" id="count-all" style="margin-top:0; margin-left:auto; flex-shrink:0;">0 tanong</span>
+        </div>
+
+      </div>
+
+      <div class="start-row">
+        <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>
+          Simulan ang Quiz →
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         QUIZ SCREEN
+    ══════════════════════════════════════════════════════ -->
+    <div id="quizScreen" class="quiz-layout hidden">
+
+      <!-- Top bar -->
+      <div class="quiz-meta">
+        <div style="display:flex; align-items:center; gap:.6rem;">
+          <button class="btn btn-ghost" style="padding:.3rem .6rem; font-size:.82rem;" onclick="backToMenu()">← Menu</button>
+          <div class="score-display" id="scoreDisplay">Iskor: 0</div>
+        </div>
+        <div style="font-size:.88rem; color:var(--mid-gray);" id="qCounter">Tanong 1 ng 65</div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="question-card">
+        <span class="question-type-tag" id="typeTag">Multiple Choice</span>
+        <span class="category-badge" id="catBadge">Kategorya</span>
+        <div class="question-text" id="questionText">Naglo-load...</div>
+
+        <!-- Multiple Choice -->
+        <div id="mcArea" class="options-grid hidden"></div>
+
+        <!-- Identification -->
+        <div id="idArea" class="hidden">
+          <div class="id-input-wrap">
+            <input type="text" class="id-input" id="idInput" placeholder="Isulat ang iyong sagot dito..." autocomplete="off" />
+            <button class="btn btn-navy" id="idCheckBtn" onclick="checkIdentification()">Suriin</button>
+          </div>
+        </div>
+
+        <!-- Enumeration -->
+        <div id="enumArea" class="hidden">
+          <div class="enum-inputs" id="enumInputs"></div>
+          <div class="action-row">
+            <button class="btn btn-navy" id="enumCheckBtn" onclick="checkEnumeration()">Isumite ang mga Sagot</button>
+          </div>
+        </div>
+
+        <!-- Essay -->
+        <div id="essayArea" class="hidden">
+          <p class="self-eval-note">✏️ Self-evaluation — Isulat ang iyong sagot, pagkatapos ay ipakita ang modelo ng sagot para suriin ang iyong sarili.</p>
+          <textarea class="essay-textarea" id="essayInput" placeholder="Isulat ang iyong sagot dito..."></textarea>
+          <div class="action-row">
+            <button class="btn btn-gold" onclick="revealEssay()">Ipakita ang Modelo ng Sagot 📖</button>
+          </div>
+        </div>
+
+        <!-- Feedback Box -->
+        <div class="feedback-box" id="feedbackBox"></div>
+      </div>
+
+      <!-- Next Button -->
+      <div class="action-row" id="nextRow" style="display:none;">
+        <button class="btn btn-navy" id="nextBtn" onclick="nextQuestion()">Susunod na Tanong →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         RESULTS SCREEN
+    ══════════════════════════════════════════════════════ -->
+    <div id="resultsScreen" class="quiz-layout hidden">
+      <div class="results-screen">
+        <div class="results-emoji" id="resultsEmoji">🎉</div>
+        <h2 id="resultsHeading">Magaling!</h2>
+        <div class="score-big" id="scoreBig">0 / 0</div>
+        <div class="score-label" id="scoreLabel">0%</div>
+
+        <div class="results-breakdown" id="resultsBreakdown"></div>
+
+        <div class="results-actions">
+          <button class="btn btn-gold" onclick="restartSameType()">🔄 Ulitin ang ganitong Uri</button>
+          <button class="btn btn-outline" onclick="backToMenu()">🎯 Pumili ng Ibang Uri</button>
+          <a href="index.html" class="btn btn-ghost">🏠 Tahanan</a>
+        </div>
+
+        <div class="review-section" id="reviewSection"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Rizal Reviewer &copy; 2025 &mdash; Para sa mga mag-aaral ng kasaysayan ng Pilipinas.</p>
+  </footer>
+
+  <script src="questions.js"></script>
+  <script>
+  // =========================================================
+  //  Quiz Engine with Category Selection
+  // =========================================================
+
+  let selectedCategory = null;  // yugto1, yugto2, etc., or 'all'
+  let selectedType     = null;  // 'identification' | 'multiple-choice' | 'enumeration' | 'essay' | 'all'
+  let shuffled         = [];
+  let currentIdx       = 0;
+  let score            = 0;
+  let answered         = false;
+  let wrongItems       = [];
+  let essayRevealed    = false;
+
+  // Category mappings
+  const CATEGORY_MAP = {
+    'yugto1': ['Pamilya at Kapanganakan', 'Calamba', 'Biñan'],
+    'yugto2': ['Ateneo Municipal'],
+    'yugto3': ['UST'],
+    'yugto4': ['Buhay sa Europa'],
+    'yugto5': ['Noli Me Tangere'],
+    'yugto6': ['Paglalakbay'],
+    'yugto7': ['GOMBURZA', 'Lipunang Kolonyal'],
+    'yugto8': ['Mga Tula at Akda']
+  };
+
+  const CATEGORY_NAMES = {
+    'yugto1': 'Yugto 1: Pamilya at Kabataan',
+    'yugto2': 'Yugto 2: Ateneo Municipal',
+    'yugto3': 'Yugto 3: UST',
+    'yugto4': 'Yugto 4: Buhay sa Europa',
+    'yugto5': 'Yugto 5: Noli Me Tangere',
+    'yugto6': 'Yugto 6: Paglalakbay',
+    'yugto7': 'Yugto 7: GOMBURZA & Kolonyal',
+    'yugto8': 'Yugto 8: Mga Tula at Akda',
+    'all': 'Lahat ng Yugto'
+  };
+
+  // ── Helpers ──────────────────────────────────────────────
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function normalize(str) {
+    return String(str).trim().toLowerCase()
+      .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e')
+      .replace(/[íìîï]/g,'i').replace(/[óòôö]/g,'o')
+      .replace(/[úùûü]/g,'u').replace(/ñ/g,'n');
+  }
+
+  function typeLabel(type) {
+    const map = {
+      'multiple-choice': '🔵 Multiple Choice',
+      'identification':  '🔍 Identification',
+      'enumeration':     '📋 Enumeration',
+      'essay':           '✍️ Essay (Self-Evaluation)'
+    };
+    return map[type] || type;
+  }
+
+  // ── Count questions per type ──────────────────────────────
+  function initCounts() {
+    // Count by category
+    for (let cat in CATEGORY_MAP) {
+      const categories = CATEGORY_MAP[cat];
+      const n = QUESTIONS.filter(q => categories.includes(q.category)).length;
+      const el = document.getElementById(`count-${cat}`);
+      if (el) el.textContent = `${n} tanong`;
+    }
+    document.getElementById('count-all-topics').textContent = `${QUESTIONS.length} tanong`;
+
+    // Count by type (will update after category selection)
+    updateTypeCounts();
+  }
+
+  function updateTypeCounts() {
+    const pool = getQuestionPool();
+    const types = ['identification','multiple-choice','enumeration','essay'];
+    types.forEach(t => {
+      const n = pool.filter(q => q.type === t).length;
+      const el = document.getElementById(`count-${t}`);
+      if (el) el.textContent = `${n} tanong`;
+    });
+    const allEl = document.getElementById('count-all');
+    if (allEl) allEl.textContent = `${pool.length} tanong`;
+  }
+
+  function getQuestionPool() {
+    if (!selectedCategory || selectedCategory === 'all') {
+      return QUESTIONS;
+    }
+    const categories = CATEGORY_MAP[selectedCategory];
+    return QUESTIONS.filter(q => categories.includes(q.category));
+  }
+
+  // ── Category selection ────────────────────────────────────
+  function selectCategory(card) {
+    document.querySelectorAll('#topicSelectScreen .type-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCategory = card.dataset.category;
+    document.getElementById('categoryNextBtn').disabled = false;
+  }
+
+  function goToTypeSelect() {
+    if (!selectedCategory) return;
+    document.getElementById('topicSelectScreen').classList.add('hidden');
+    document.getElementById('modeSelectScreen').classList.remove('hidden');
+    document.getElementById('selectedTopicName').textContent = CATEGORY_NAMES[selectedCategory];
+    updateTypeCounts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function backToTopicSelect() {
+    document.getElementById('modeSelectScreen').classList.add('hidden');
+    document.getElementById('topicSelectScreen').classList.remove('hidden');
+    selectedType = null;
+    document.querySelectorAll('#modeSelectScreen .type-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('startBtn').disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Type selection ────────────────────────────────────────
+  function selectType(card) {
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedType = card.dataset.type;
+    document.getElementById('startBtn').disabled = false;
+  }
+
+  // ── Start ─────────────────────────────────────────────────
+  function startQuiz() {
+    if (!selectedType || !selectedCategory) return;
+
+    let pool = getQuestionPool();
+    
+    if (selectedType !== 'all') {
+      pool = pool.filter(q => q.type === selectedType);
+    }
+
+    shuffled   = shuffle(pool);
+    currentIdx = 0;
+    score      = 0;
+    wrongItems = [];
+
+    document.getElementById('topicSelectScreen').classList.add('hidden');
+    document.getElementById('modeSelectScreen').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.add('hidden');
+    document.getElementById('quizScreen').classList.remove('hidden');
+
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Back to menu ──────────────────────────────────────────
+  function backToMenu() {
+    document.getElementById('quizScreen').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.add('hidden');
+    document.getElementById('topicSelectScreen').classList.remove('hidden');
+    document.getElementById('modeSelectScreen').classList.add('hidden');
+    selectedType = null;
+    selectedCategory = null;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('categoryNextBtn').disabled = true;
+    document.getElementById('startBtn').disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Restart same type ─────────────────────────────────────
+  function restartSameType() {
+    startQuiz();
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function renderQuestion() {
+    answered      = false;
+    essayRevealed = false;
+    const q     = shuffled[currentIdx];
+    const total = shuffled.length;
+
+    document.getElementById('qCounter').textContent     = `Tanong ${currentIdx + 1} ng ${total}`;
+    document.getElementById('scoreDisplay').textContent  = `Iskor: ${score}`;
+    document.getElementById('progressBar').style.width   = `${(currentIdx / total) * 100}%`;
+
+    document.getElementById('typeTag').textContent       = typeLabel(q.type);
+    document.getElementById('catBadge').textContent      = q.category;
+    document.getElementById('questionText').textContent  = q.question;
+
+    ['mcArea','idArea','enumArea','essayArea'].forEach(id => {
+      document.getElementById(id).classList.add('hidden');
+    });
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback-box';
+    fb.innerHTML = '';
+    document.getElementById('nextRow').style.display = 'none';
+
+    if (q.type === 'multiple-choice') renderMC(q);
+    else if (q.type === 'identification') renderID(q);
+    else if (q.type === 'enumeration')   renderEnum(q);
+    else if (q.type === 'essay')          renderEssay(q);
+  }
+
+  // ── Multiple Choice ───────────────────────────────────────
+  function renderMC(q) {
+    const area = document.getElementById('mcArea');
+    area.classList.remove('hidden');
+    const opts    = shuffle(q.options);
+    const letters = ['A','B','C','D'];
+    area.innerHTML = opts.map((opt, i) => `
+      <button class="option-btn" onclick="selectOption(this,'${escQ(opt)}','${escQ(q.answer)}')" data-val="${escQ(opt)}">
+        <span class="opt-letter">${letters[i]}</span>
+        <span>${opt}</span>
+      </button>
+    `).join('');
+  }
+
+  function escQ(str) {
+    return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  function selectOption(btn, chosen, correct) {
+    if (answered) return;
+    answered = true;
+
+    document.getElementById('mcArea').querySelectorAll('.option-btn').forEach(b => {
+      b.disabled = true;
+      if (b.dataset.val === correct)              b.classList.add('correct');
+      else if (b === btn && b.dataset.val !== correct) b.classList.add('wrong');
+    });
+
+    const q = shuffled[currentIdx];
+    if (chosen === correct) {
+      score++;
+      showFeedback('correct', '✅ Tama! ' + q.explanation);
+    } else {
+      showFeedback('wrong', `❌ Mali. Ang tamang sagot: <span class="fb-answer">${correct}</span><br>${q.explanation}`);
+      wrongItems.push({ q, userAnswer: chosen });
+    }
+
+    document.getElementById('scoreDisplay').textContent = `Iskor: ${score}`;
+    document.getElementById('nextRow').style.display = 'flex';
+  }
+
+  // ── Identification ────────────────────────────────────────
+  function renderID(q) {
+    const area  = document.getElementById('idArea');
+    area.classList.remove('hidden');
+    const input = document.getElementById('idInput');
+    input.value     = '';
+    input.className = 'id-input';
+    input.disabled  = false;
+    document.getElementById('idCheckBtn').disabled = false;
+    input.onkeydown = e => { if (e.key === 'Enter') checkIdentification(); };
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function checkIdentification() {
+    if (answered) return;
+    const q       = shuffled[currentIdx];
+    const input   = document.getElementById('idInput');
+    const userAns = input.value.trim();
+    if (!userAns) return;
+
+    answered = true;
+    input.disabled = true;
+    document.getElementById('idCheckBtn').disabled = true;
+
+    const correct    = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const isCorrect  = correct.some(ans => normalize(userAns) === normalize(ans));
+
+    if (isCorrect) {
+      score++;
+      input.classList.add('correct');
+      showFeedback('correct', '✅ Tama! ' + q.explanation);
+    } else {
+      input.classList.add('wrong');
+      showFeedback('wrong', `❌ Mali. Ang tamang sagot: <span class="fb-answer">${correct.join(' / ')}</span><br>${q.explanation}`);
+      wrongItems.push({ q, userAnswer: userAns });
+    }
+
+    document.getElementById('scoreDisplay').textContent = `Iskor: ${score}`;
+    document.getElementById('nextRow').style.display = 'flex';
+  }
+
+  // ── Enumeration ───────────────────────────────────────────
+  function renderEnum(q) {
+    const area   = document.getElementById('enumArea');
+    area.classList.remove('hidden');
+    const inputs = document.getElementById('enumInputs');
+    inputs.innerHTML = Array.from({ length: q.answer.length }, (_, i) => `
+      <div class="enum-row">
+        <span class="enum-num">${i + 1}</span>
+        <input type="text" class="enum-input" id="enum_${i}" placeholder="Sagot ${i + 1}..." autocomplete="off" />
+      </div>
+    `).join('');
+    document.getElementById('enumCheckBtn').disabled = false;
+    setTimeout(() => { const f = document.getElementById('enum_0'); if (f) f.focus(); }, 50);
+  }
+
+  function checkEnumeration() {
+    if (answered) return;
+    answered = true;
+
+    const q       = shuffled[currentIdx];
+    const correct = q.answer;
+    let hits      = 0;
+    const userAnswers = [];
+
+    correct.forEach((_, i) => {
+      const inp     = document.getElementById(`enum_${i}`);
+      if (!inp) return;
+      inp.disabled  = true;
+      const userVal = inp.value.trim();
+      userAnswers.push(userVal);
+      const matched = correct.some(a => normalize(userVal) === normalize(a));
+      if (matched && userVal !== '') { inp.classList.add('correct'); hits++; }
+      else                           { inp.classList.add('wrong'); }
+    });
+
+    document.getElementById('enumCheckBtn').disabled = true;
+
+    const allCorrect  = hits === correct.length;
+    if (allCorrect) score++;
+
+    const correctList = correct.map((a, i) => `${i + 1}. ${a}`).join('<br>');
+    const icon        = allCorrect ? '✅' : (hits > 0 ? '⚠️' : '❌');
+    const msg         = allCorrect
+      ? `${icon} Tama lahat! (${hits}/${correct.length})`
+      : `${icon} ${hits} sa ${correct.length} ang tama.<br><span class="fb-answer">Mga tamang sagot:</span><br>${correctList}<br><br>${q.explanation}`;
+
+    showFeedback(allCorrect ? 'correct' : (hits > 0 ? 'neutral' : 'wrong'), msg);
+    if (!allCorrect) wrongItems.push({ q, userAnswer: userAnswers.join(', ') });
+
+    document.getElementById('scoreDisplay').textContent = `Iskor: ${score}`;
+    document.getElementById('nextRow').style.display = 'flex';
+  }
+
+  // ── Essay ─────────────────────────────────────────────────
+  function renderEssay(q) {
+    const area = document.getElementById('essayArea');
+    area.classList.remove('hidden');
+    document.getElementById('essayInput').value    = '';
+    document.getElementById('essayInput').disabled = false;
+  }
+
+  function revealEssay() {
+    if (essayRevealed) return;
+    essayRevealed = true;
+    answered      = true;
+
+    const q = shuffled[currentIdx];
+    document.getElementById('essayInput').disabled = true;
+
+    showFeedback('neutral',
+      `📖 <strong>Modelo ng Sagot:</strong><br><br>${q.answer.replace(/\n/g,'<br>')}<br><br><em>${q.explanation}</em>`
+    );
+    document.getElementById('nextRow').style.display = 'flex';
+  }
+
+  // ── Feedback ──────────────────────────────────────────────
+  function showFeedback(type, html) {
+    const fb = document.getElementById('feedbackBox');
+    fb.className = `feedback-box show ${type === 'correct' ? 'correct-fb' : type === 'wrong' ? 'wrong-fb' : 'neutral-fb'}`;
+    fb.innerHTML = html;
+  }
+
+  // ── Next ──────────────────────────────────────────────────
+  function nextQuestion() {
+    currentIdx++;
+    if (currentIdx >= shuffled.length) showResults();
+    else renderQuestion();
+  }
+
+  // ── Results ───────────────────────────────────────────────
+  function showResults() {
+    document.getElementById('quizScreen').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.remove('hidden');
+
+    const total = shuffled.length;
+    const pct   = Math.round((score / total) * 100);
+
+    let emoji, heading, label;
+    if (pct >= 90)      { emoji = '🏆'; heading = 'Napakahusay!';        label = 'Bayani ka ng kasaysayan!'; }
+    else if (pct >= 75) { emoji = '🎉'; heading = 'Magaling!';           label = 'Natatandaan mo ang Rizal!'; }
+    else if (pct >= 55) { emoji = '📚'; heading = 'Mabuti!';             label = 'Kaunti pa at magiging eksperto ka!'; }
+    else if (pct >= 35) { emoji = '💪'; heading = 'Patuloy Pag-aralan!'; label = 'Kaya mo pa!'; }
+    else                 { emoji = '🌱'; heading = 'Magsimula Ulit!';     label = 'Pag-aralan pa ang reviewer!'; }
+
+    document.getElementById('resultsEmoji').textContent   = emoji;
+    document.getElementById('resultsHeading').textContent = heading;
+    document.getElementById('scoreBig').textContent       = `${score} / ${total}`;
+    document.getElementById('scoreLabel').textContent     = `${pct}% — ${label}`;
+
+    document.getElementById('resultsBreakdown').innerHTML = `
+      <div class="breakdown-chip correct-chip">✅ Tama: ${score}</div>
+      <div class="breakdown-chip wrong-chip">❌ Mali: ${total - score}</div>
+      <div class="breakdown-chip">📊 ${pct}%</div>
+    `;
+
+    const rev = document.getElementById('reviewSection');
+    if (wrongItems.length === 0) {
+      rev.innerHTML = '<p style="text-align:center;color:var(--green);font-weight:600;margin-top:1rem;">🎊 Walang maling sagot! Perfect score!</p>';
+    } else {
+      rev.innerHTML = `
+        <h3>Mga Maling Sagot (${wrongItems.length})</h3>
+        ${wrongItems.map(item => `
+          <div class="review-item">
+            <div class="ri-q">${item.q.question}</div>
+            <div class="ri-your">Iyong sagot: ${item.userAnswer || '(walang sagot)'}</div>
+            <div class="ri-correct">Tamang sagot: ${Array.isArray(item.q.answer) ? item.q.answer.join(' | ') : item.q.answer}</div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Boot ──────────────────────────────────────────────────
+  initCounts();
+  </script>
+
+</body>
+</html>

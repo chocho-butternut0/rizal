@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reviewer — Rizal Reviewer</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .reviewer-layout {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .reviewer-content {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .reviewer-content h2 {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--primary);
+      font-size: 1.75rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 3px solid var(--accent-orange);
+    }
+
+    .reviewer-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .reviewer-content h3 {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--primary-dark);
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      margin-bottom: .75rem;
+    }
+
+    .reviewer-content h4 {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--accent-red);
+      font-size: 1.1rem;
+      margin-top: 1.25rem;
+      margin-bottom: .5rem;
+      font-weight: 600;
+    }
+
+    .reviewer-content p {
+      margin-bottom: 1rem;
+      color: var(--dark-gray);
+    }
+
+    .reviewer-content ul, .reviewer-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .reviewer-content li {
+      margin-bottom: .5rem;
+      color: var(--dark-gray);
+    }
+
+    .reviewer-content strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .reviewer-content em {
+      color: var(--accent-red);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .highlight-box {
+      background: rgba(255,173,51,.1);
+      border-left: 4px solid var(--accent-orange);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: var(--radius-sm);
+    }
+
+    .note-box {
+      background: rgba(107,170,117,.1);
+      border-left: 4px solid var(--green);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: var(--radius-sm);
+    }
+
+    .warning-box {
+      background: rgba(204,20,0,.1);
+      border-left: 4px solid var(--red);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: var(--radius-sm);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+    }
+
+    th, td {
+      padding: .75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    th {
+      background: var(--primary);
+      color: var(--white);
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    tr:hover {
+      background: var(--off-white);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary);
+      color: var(--white);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+
+    .back-to-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 600px) {
+      .reviewer-content {
+        padding: 1.5rem;
+      }
+      
+      .back-to-top {
+        width: 45px;
+        height: 45px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="site-title">Rizal <span>Reviewer</span></div>
+      <nav class="site-nav">
+        <a href="index.html"      class="nav-link">Tahanan</a>
+        <a href="quiz.html"       class="nav-link">Quiz</a>
+        <a href="flashcards.html" class="nav-link">Flashcards</a>
+        <a href="reviewer.html"   class="nav-link active">Reviewer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reviewer-layout">
+    <div class="reviewer-content">
+      <h1 style="text-align:center; color:var(--primary); margin-bottom:2rem; font-size:2.5rem;">📚 Rizal Reviewer</h1>
+
+      <div class="highlight-box">
+        <strong>📖 Kompletong Gabay:</strong> Lahat ng mahahalagang impormasyon tungkol sa buhay, edukasyon, mga akda, at paglalakbay ni Dr. Jose Rizal.
+      </div>
+
+      <h2>🏠 Pamilya at Kapanganakan</h2>
+      
+      <h3>Kapanganakan</h3>
+      <ul>
+        <li><strong>Petsa ng Kapanganakan:</strong> Hunyo 19, 1861</li>
+        <li><strong>Lugar:</strong> Calamba, Laguna, Pilipinas</li>
+        <li><strong>Buong Pangalan:</strong> Jose Protacio Rizal Mercado y Alonso Realonda</li>
+      </ul>
+
+      <h3>Mga Magulang</h3>
+      <ul>
+        <li><strong>Ama:</strong> Francisco Mercado Rizal — magsasakang may-ari ng lupa</li>
+        <li><strong>Ina:</strong> Teodora Alonso Realonda — edukadang babae, unang guro ni Jose</li>
+      </ul>
+
+      <h3>Mga Kapatid (11 lahat)</h3>
+      <div class="note-box">
+        <strong>Si Jose ay IKAPITO (7th) sa labing-isang magkakapatid</strong>
+      </div>
+      <ol>
+        <li><strong>Saturnina (Neneng)</strong> — pinakmatanda</li>
+        <li><strong>Paciano</strong> — naging protector at sponsor ni Jose sa Europa</li>
+        <li><strong>Narcisa (Sisa)</strong></li>
+        <li><strong>Olympia (Ypia)</strong></li>
+        <li><strong>Lucia</strong></li>
+        <li><strong>Maria (Biang)</strong></li>
+        <li><strong>JOSE</strong> — ika-pito</li>
+        <li><strong>Concepcion (Concha)</strong> — namatay edad 3 (1862-1865), unang pag-iyak ni Jose</li>
+        <li><strong>Josefa (Panggoy)</strong></li>
+        <li><strong>Trinidad (Trining)</strong></li>
+        <li><strong>Soledad (Choleng)</strong> — bunso</li>
+      </ol>
+
+      <h3>Mga Guro Bago ang Biñan</h3>
+      <ul>
+        <li><strong>Teodora Alonso</strong> — ina, unang guro (pagbabasa, pagsulat, Doctrina Cristiana)</li>
+        <li><strong>Celestino</strong> — panimulang aralin</li>
+        <li><strong>Lucas Padua</strong> — aritmetika</li>
+        <li><strong>Leon Monroy</strong> — Espanyol at Latin</li>
+        <li><strong>Tiyo Manuel</strong> — pisikal/katawan</li>
+        <li><strong>Tiyo Gregorio</strong> — aklat at pagmamasid</li>
+        <li><strong>Tiyo Jose Alberto</strong> — sining/pagpipinta</li>
+      </ul>
+
+      <h2>📖 Edukasyon</h2>
+
+      <h3>Biñan (1870)</h3>
+      <ul>
+        <li><strong>Guro:</strong> Maestro Justiniano Aquino Cruz</li>
+        <li><strong>Karanasan:</strong> "Walang araw na walang hampas" — 5-6 palo kahit maganda ang marka</li>
+        <li><strong>Class Painter:</strong> Jose Guevarra — tumulong si Rizal kay Juancho</li>
+        <li><strong>Pag-uwi:</strong> Disyembre 17, 1870 sakay ng Bapor Talim</li>
+      </ul>
+
+      <h3>Ateneo Municipal de Manila (1872-1877)</h3>
+      
+      <h4>Pumasok: 1872 (edad 11)</h4>
+      
+      <div class="highlight-box">
+        <strong>Parehong taon:</strong> GOMBURZA execution (Pebrero 17, 1872) — Cavite Mutiny: Enero 20, Pagbitay: Pebrero 17
+      </div>
+
+      <h4>Sistema ng Imperyo</h4>
+      <ul>
+        <li><strong>Dalawang Imperyo:</strong>
+          <ul>
+            <li>Romano (interno, bandilang pula)</li>
+            <li>Carthagena (externo, bandilang asul) — grupo ni Rizal</li>
+          </ul>
+        </li>
+        <li><strong>Limang Ranggo:</strong>
+          <ol>
+            <li>Emperador</li>
+            <li>Tribuna</li>
+            <li>Dekuryon</li>
+            <li>Senturyon</li>
+            <li>Tagapagdala ng Bandila</li>
+          </ol>
+        </li>
+        <li><strong>Naging Emperador:</strong> Makalipas ang isang buwan sa unang taon</li>
+      </ul>
+
+      <h4>Mga Guro</h4>
+      <ul>
+        <li><strong>Padre José Bech</strong> — unang guro ("payat at matangkad, seryoso, inspirado")</li>
+        <li><strong>Fr. Francisco de Paula Sanchez</strong> — paboritong guro, nag-inspire bilang manunulat</li>
+      </ul>
+
+      <h4>Pagtatapos: Marso 23, 1877</h4>
+      <ul>
+        <li><strong>Degree:</strong> Bachelor of Arts (Bachiller en Artes)</li>
+        <li><strong>Karangalan:</strong> Sobresaliente (Excellent) sa lahat ng subjects</li>
+      </ul>
+
+      <h4>Mga Tula sa Ateneo</h4>
+      <ul>
+        <li><strong>Mi Primera Inspiración</strong> (1874) — inihandog sa ina</li>
+        <li><strong>A la Juventud Filipina</strong> (1879) — nanalo ng 1st prize sa Liceo Artístico-Literario de Manila</li>
+        <li><strong>Un Diálogo Alusivo a la Despedida</strong> (1877) — huling tula, pamamaalam sa kaklase</li>
+      </ul>
+
+      <h3>Universidad de Santo Tomas (1877-1882)</h3>
+      
+      <h4>Mga Kurso</h4>
+      <ol>
+        <li><strong>Pilosopiya at Letras</strong> — una</li>
+        <li><strong>Medisina</strong> — lumipat, hindi natapos</li>
+        <li><strong>Agrimensor (Surveying)</strong> — bokasyonal sa Ateneo, natapos Mayo 21, 1878</li>
+      </ol>
+
+      <h4>Karanasan</h4>
+      <ul>
+        <li><strong>Diskriminasyon:</strong> Mga Pilipinong estudyante ay mas mababa kaysa Espanyol</li>
+        <li><strong>Dominikano:</strong> Ang mga Dominican Friars ang namamahala</li>
+      </ul>
+
+      <h4>Mga Pag-ibig</h4>
+      <ul>
+        <li><strong>Segunda Katigbak</strong> (edad 14) — unang pag-ibig, Dis. 1877, unang kabiguan</li>
+        <li><strong>Leonor Valenzuela ('Orang')</strong> — kapitbahay sa Intramuros, invisible ink (asin + tubig)</li>
+        <li><strong>Leonor Rivera</strong> — seryosong nobya, naiwan sa Pilipinas, inspirasyon ni María Clara</li>
+      </ul>
+
+      <h2>🌍 Buhay sa Europa</h2>
+
+      <h3>Lihim na Pag-alis (Mayo 3, 1882)</h3>
+      <ul>
+        <li><strong>Barko:</strong> Salvadora (kapitan: Donato Lecha)</li>
+        <li><strong>Pangalang Ginamit:</strong> "Jose Mercado" — para hindi matukoy</li>
+        <li><strong>Tumutulong:</strong> Paciano — nagbigay ng pera</li>
+        <li><strong>Dahilan:</strong>
+          <ul>
+            <li>Magpagamot ng mata ng ina (glaucoma)</li>
+            <li>Mag-aral ng medisina sa Europa</li>
+            <li>Makita ang kalayaan at demokrasya</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>Paglalakbay Patungong Europa (1882)</h3>
+      <ol>
+        <li><strong>Singapore</strong> — Mayo 9, Otel La Paz</li>
+        <li><strong>Ceylon (Sri Lanka)</strong> — Point de Galle, sakay ng Djemnah</li>
+        <li><strong>Marseille, France</strong></li>
+        <li><strong>Barcelona, Spain</strong> — Hunyo 15, 1882</li>
+      </ol>
+
+      <h3>Universidad Central de Madrid</h3>
+      <ul>
+        <li><strong>Kurso:</strong> Medisina</li>
+        <li><strong>Degree:</strong> Licentiate in Medicine</li>
+      </ul>
+
+      <h3>Paris</h3>
+      <ul>
+        <li><strong>Pag-aaral:</strong> Ophthalmology sa ilalim ni Dr. Louis de Wecker</li>
+      </ul>
+
+      <h3>Heidelberg, Germany (Peb. 3 - Agosto 8, 1886)</h3>
+      <ul>
+        <li><strong>Tirahan:</strong> Karlstrasse 16 (kasera: Nebel)</li>
+        <li><strong>Guro:</strong> Dr. Otto Becker — doktor ng mata</li>
+        <li><strong>Tula:</strong> "A las Flores de Heidelberg" (Abril 22, 1886)</li>
+        <li><strong>Event:</strong> Ika-500 anibersaryo ng Pamantasan ng Heidelberg</li>
+      </ul>
+
+      <h3>Berlin, Germany (Nob. 1886 - Mayo 1887)</h3>
+      <ul>
+        <li><strong>Tirahan:</strong> Jägerstrasse</li>
+        <li><strong>Ginawa:</strong> Natapos ang <strong>Noli Me Tangere</strong></li>
+        <li><strong>Kaibigan:</strong> Dr. Máximo Viola — nagpahiram ng ₱300 para sa printing</li>
+      </ul>
+
+      <h3>Ferdinand Blumentritt</h3>
+      <ul>
+        <li><strong>Tungkol:</strong> Austrian professor, pinaka-matalik na kaibigan</li>
+        <li><strong>Lugar:</strong> Leitmeritz, Bohemia (Czech Republic)</li>
+        <li><strong>Unang Liham:</strong> Hulyo 31, 1886</li>
+        <li><strong>Tagasuporta:</strong> Kilusang Pilipino</li>
+      </ul>
+
+      <h2>📕 Noli Me Tangere</h2>
+
+      <div class="warning-box">
+        <strong>⚠️ Mahalagang Tandaan:</strong> Liceo Artístico-Literario de Manila ang tamang pangalan, HINDI "Juegos Florales"
+      </div>
+
+      <h3>Pagsusulat at Paglilimbag</h3>
+      <ul>
+        <li><strong>Natapos:</strong> Abril-Hunyo 1886 sa Wilhelmsfeld, Germany (Pastor Karl Ullmer)</li>
+        <li><strong>Huling Rebisyon:</strong> Berlin (1886-1887)</li>
+        <li><strong>Nailimbag:</strong> Marso 1887, Berlin</li>
+        <li><strong>Palimbagan:</strong> Berliner Buchdruckerei-Aktiengesellschaft</li>
+        <li><strong>Kopya:</strong> 2,000</li>
+        <li><strong>Halaga:</strong> ₱300</li>
+      </ul>
+
+      <h3>Kahulugan</h3>
+      <ul>
+        <li><strong>"Noli Me Tangere":</strong> Latin = "Huwag Mo Akong Salingin" / "Touch Me Not"</li>
+        <li><strong>Mula sa:</strong> Bibliya (Juan 20:17)</li>
+      </ul>
+
+      <h3>Mga Pangunahing Tauhan</h3>
+      <ul>
+        <li><strong>Crisostomo Ibarra</strong> — pangunahing bida, Pilipinong nakapalag-aral sa Europa</li>
+        <li><strong>María Clara</strong> — simbolo ng dalaga, inspirasyon: Leonor Rivera</li>
+        <li><strong>Padre Damaso</strong> — mapang-abusong pari</li>
+        <li><strong>Elias</strong> — rebolusyonaryong kaibigan ni Ibarra</li>
+        <li><strong>Kapitan Tiago</strong> — mayamang Indio</li>
+        <li><strong>Sisa</strong> — nababaliw na ina</li>
+      </ul>
+
+      <h3>Reaksyon</h3>
+      <ul>
+        <li><strong>8 Polyetos Laban:</strong> Padre José Rodríguez (Agustino) — "kasalanang mortal"</li>
+        <li><strong>Tugon:</strong> "Caiingat Cayo" ni Marcelo H. del Pilar (sagisag: Dolores Manapat)</li>
+        <li><strong>Tagapagtanggol:</strong> Don Jose Taviel de Andrade — tenyente, ibinigay ni Gobernador Terrero</li>
+      </ul>
+
+      <h2>✈️ Paglalakbay sa Asya at Amerika (1888)</h2>
+
+      <h3>Japan (Peb. 28 - Abril 13, 1888)</h3>
+      <ul>
+        <li><strong>Yokohama:</strong> Grand Hotel</li>
+        <li><strong>Tokyo:</strong> Tokyo Hotel, Marso 2-7</li>
+        <li><strong>Nakilala:</strong> Seiko Usui (O-Sei-San) — guro ng Ingles, romantikong interes</li>
+        <li><strong>Napa-amaze:</strong> Pag-unlad ng Japan sa Meiji era</li>
+        <li><strong>Paglabas:</strong> Abril 13, sakay ng S.S. Belgic</li>
+      </ul>
+
+      <h3>United States (Abril 28 - Mayo 16, 1888)</h3>
+      <ul>
+        <li><strong>San Francisco:</strong> Palace Hotel, nakilala si Leland Stanford</li>
+        <li><strong>Obserbasyon:</strong> Diskriminasyon laban sa mga Intsik</li>
+        <li><strong>Sinabi:</strong> "Ang Amerika ay isang bansang may napakagaling na kalayaan ngunit para lamang sa mga Puti"</li>
+        <li><strong>New York:</strong> Nakita ang Statue of Liberty</li>
+        <li><strong>Paglabas:</strong> Mayo 16, sakay ng City of Rome patungong Liverpool</li>
+      </ul>
+
+      <h2>🏛️ Lipunang Kolonyal</h2>
+
+      <h3>Antas ng Lipunan</h3>
+      <ol>
+        <li><strong>Peninsulares</strong> — Espanyol ipinanganak sa Espanya</li>
+        <li><strong>Insulares / Creoles</strong> — Espanyol ipinanganak sa Pilipinas</li>
+        <li><strong>Chinese Mestizos</strong></li>
+        <li><strong>Principalia</strong> — lokal na elite Pilipino (pamilya Rizal)</li>
+        <li><strong>Inquilinos</strong></li>
+        <li><strong>Indios / Magsasaka</strong> — karamihang Pilipino</li>
+      </ol>
+
+      <h3>Mga Buwis at Sapilitang Paggawa</h3>
+      <ul>
+        <li><strong>Polo y Servicios</strong> — sapilitang paggawa (40 araw/taon, 16-60 y/o)</li>
+        <li><strong>Bandala</strong> — sapilitang pagbebenta ng produkto sa mababang presyo</li>
+        <li><strong>Tributo</strong> — buwis sa bawat pamilya</li>
+        <li><strong>Donativo de Zamboanga</strong> — pang-depensa sa Moro</li>
+        <li><strong>Sanctorum</strong> — para sa simbahan</li>
+        <li><strong>Vinta</strong> — donasyon para sa barko ng militar</li>
+      </ul>
+
+      <h2>⚖️ GOMBURZA</h2>
+
+      <div class="warning-box">
+        <strong>⚠️ IMPORTANTE:</strong> Pebrero 17, 1872 ang pagbitay sa GOMBURZA — HINDI Pebrero 1!
+      </div>
+
+      <h3>Timeline</h3>
+      <ul>
+        <li><strong>Enero 20, 1872:</strong> Cavite Mutiny</li>
+        <li><strong>Pebrero 17, 1872:</strong> Pagbitay sa GOMBURZA (garrote, Bagumbayan)</li>
+      </ul>
+
+      <h3>Tatlong Pari</h3>
+      <ol>
+        <li><strong>Padre Mariano Gomez</strong></li>
+        <li><strong>Padre Jose Burgos</strong></li>
+        <li><strong>Padre Jacinto Zamora</strong></li>
+      </ol>
+
+      <h3>Epekto kay Paciano at Jose</h3>
+      <ul>
+        <li><strong>Paciano:</strong> Kaibigan at nangungupahan ni Padre Burgos — pinatigil sa pag-aaral</li>
+        <li><strong>Jose:</strong> 11 taong gulang, gumising ang kamalayan — nag-udyok ng pagkabayani</li>
+      </ul>
+
+      <h2>📅 Mahahalagang Petsa</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Taon</th>
+              <th>Pangyayari</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1861</strong></td>
+              <td>Hunyo 19 — Kapanganakan ni Jose Rizal sa Calamba, Laguna</td>
+            </tr>
+            <tr>
+              <td><strong>1870</strong></td>
+              <td>Pag-aaral sa Biñan, Disyembre 17 — pag-uwi</td>
+            </tr>
+            <tr>
+              <td><strong>1872</strong></td>
+              <td>Pumasok sa Ateneo; GOMBURZA execution (Pebrero 17)</td>
+            </tr>
+            <tr>
+              <td><strong>1877</strong></td>
+              <td>Nagtapos sa Ateneo (Bachelor of Arts); Pumasok sa UST</td>
+            </tr>
+            <tr>
+              <td><strong>1879</strong></td>
+              <td>"A la Juventud Filipina" — nanalo sa Liceo Artístico-Literario</td>
+            </tr>
+            <tr>
+              <td><strong>1880</strong></td>
+              <td>"El Consejo de los Dioses" — nanalo (gintong singsing)</td>
+            </tr>
+            <tr>
+              <td><strong>1882</strong></td>
+              <td>Mayo 3 — Lihim na pag-alis patungong Europa (Salvadora)</td>
+            </tr>
+            <tr>
+              <td><strong>1886</strong></td>
+              <td>Peb-Agosto: Heidelberg; Natapos ang Noli (Wilhelmsfeld)</td>
+            </tr>
+            <tr>
+              <td><strong>1887</strong></td>
+              <td>Marso — Noli nailimbag sa Berlin; Agosto — Bumalik sa Pilipinas</td>
+            </tr>
+            <tr>
+              <td><strong>1888</strong></td>
+              <td>Ikalawang Europa trip via Japan, USA, England</td>
+            </tr>
+            <tr>
+              <td><strong>1891</strong></td>
+              <td>El Filibusterismo nailimbag sa Ghent, Belgium</td>
+            </tr>
+            <tr>
+              <td><strong>1896</strong></td>
+              <td>Disyembre 30 — Binaril sa Bagumbayan (Luneta)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="highlight-box" style="text-align:center; margin-top:3rem;">
+        <strong>🎓 "Ang kabataan ang pag-asa ng bayan" — Jose Rizal</strong>
+      </div>
+
+    </div>
+  </main>
+
+  <a href="#" class="back-to-top" title="Bumalik sa taas">↑</a>
+
+  <footer class="site-footer">
+    <p>Rizal Reviewer &copy; 2025 &mdash; Para sa mga mag-aaral ng kasaysayan ng Pilipinas.</p>
+  </footer>
+
+  <script>
+    // Smooth scroll to top
+    document.querySelector('.back-to-top').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
